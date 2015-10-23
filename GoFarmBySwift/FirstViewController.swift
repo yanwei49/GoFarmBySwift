@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TrendsDisplayPhotoViewDelegate, FirstBuyTableViewCellDelegate  {
+class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TrendsDisplayPhotoViewDelegate  {
 
     var tableView: UITableView!
     var tableHeader: UIView!
@@ -17,6 +17,27 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let database = DataBaseManager.shareInstance
+        var users = [UserModel]()
+        for i in 0..<2 {
+            let user = UserModel()
+            user.userId = "1"+"\(i)"
+            user.userAccount = "888"+"\(i)"
+            user.userName = "yanwei"+"\(i)"
+            users.append(user)
+        }
+//        database.insertUser(users)
+        database.getUserList()
+        
+        let user = UserModel()
+        user.userId = "10"
+        user.userAccount = "2880"
+        user.userName = "neimei0"
+
+        database.selectUserTable(user)
+        
+        database.getUserList()
 
         view.backgroundColor = UIColor.whiteColor()
         self.title = "首页"
@@ -73,7 +94,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func createTableView() {
         tableView = UITableView(frame: CGRectZero, style: .Plain)
         tableView!.backgroundColor = UIColor.whiteColor()
-        tableView!.registerClass(FirstBuyTableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
         tableView!.tableHeaderView = tableHeader
         tableView!.tableFooterView = UIView()
         tableView!.delegate = self
@@ -91,11 +111,11 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func obtainDataSource() {
         dataSource = NSMutableArray()
         for _ in 0 ..< 3 {
-            let model = GoodsModel()
-            model.goodsIconImage = "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg"
-            model.goodsName = "农家土鸡"
-            model.goodsOriginalPrice = "150"
-            model.goodsNowPrice = "100"
+            let model = ProductModel()
+            model.productIconImages = ["https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg"]
+            model.productName = "农家土鸡"
+            model.productOriginalPrice = "150"
+            model.productNowPrice = "100"
             dataSource.addObject(model)
         }
         tableView.reloadData()
@@ -107,12 +127,12 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell") as! FirstBuyTableViewCell
-        cell.selectedBackgroundView = UIView()
-        cell.delegate = self
-        cell.dataSource = dataSource
+        var cell = tableView.dequeueReusableCellWithIdentifier("cell")
+        if cell == nil {
+            cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
+        }
         
-        return cell
+        return cell!
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -125,21 +145,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         categoryVC.category = "农庄"
         categoryVC.hidesBottomBarWhenPushed = true
         self.navigationController!.showViewController(categoryVC, sender: nil)
-        print("点击了第个\(item)Item")
+        print("点击了第个\(item)Item", terminator: "")
     }
     
-    //FirstBuyTableViewCell的代理方法
-    func firstBuyTableViewCell(cell: FirstBuyTableViewCell, buttonIndex index: NSInteger) {
-        let shopDetaiVC = ShopDetailViewController()
-        shopDetaiVC.hidesBottomBarWhenPushed = true
-        self.navigationController!.showViewController(shopDetaiVC, sender: nil)
-        print("点击了低个\(index)按钮")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
 }

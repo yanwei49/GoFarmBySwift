@@ -20,7 +20,7 @@ class FarmerTableViewCell: UITableViewCell {
     var distanceLabel: UILabel?
     var mapButton: UIButton?
     
-    var model: FarmerListModel? {
+    var model: StoreModel? {
         didSet{
             reloadDataSource(self.model!)
         }
@@ -138,16 +138,16 @@ class FarmerTableViewCell: UITableViewCell {
     }
     
     //刷新cell数据
-    func reloadDataSource(model: FarmerListModel) {
-        iconIamgeView!.kf_setImageWithURL(NSURL(string: model.iconUrl)!, placeholderImage:UIImage())
-        titleLabel!.text = model.title
-        categoryLabel!.text = model.category
-        commentNumbersLabel!.text = model.commentNumbers + "条评价"
-        addressLabel!.text = "地址：" + model.address
-        distanceLabel!.text = model.distance + "km"
+    func reloadDataSource(model: StoreModel) {
+//        iconIamgeView!.kf_setImageWithURL(NSURL(string: model.iconUrl)!, placeholderImage:UIImage())
+//        titleLabel!.text = model.title
+//        categoryLabel!.text = model.category
+//        commentNumbersLabel!.text = model.commentNumbers + "条评价"
+//        addressLabel!.text = "地址：" + model.address
+//        distanceLabel!.text = model.distance + "km"
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

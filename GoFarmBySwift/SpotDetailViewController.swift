@@ -10,7 +10,7 @@ import UIKit
 
 class SpotDetailViewController: UIViewController {
 
-    var model: FarmModel?
+    var model: StoreModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -58,6 +58,9 @@ public class Constraint {
     public func updatePriorityMedium() -> Void { fatalError("Must be implemented by Concrete subclass.") }
     public func updatePriorityLow() -> Void { fatalError("Must be implemented by Concrete subclass.") }
     
+    internal var makerFile: String = "Unknown"
+    internal var makerLine: UInt = 0
+    
 }
 
 /**
@@ -127,7 +130,7 @@ internal class ConcreteConstraint: Constraint {
     }
     
     internal override func install() -> [LayoutConstraint] {
-        return self.installOnViewUpdatingExisting(false)
+        return self.installOnView(updateExisting: false, file: self.makerFile, line: self.makerLine)
     }
     
     internal override func uninstall() -> Void {
@@ -135,24 +138,34 @@ internal class ConcreteConstraint: Constraint {
     }
     
     internal override func activate() -> Void {
-        if NSLayoutConstraint.respondsToSelector("activateConstraints:") && self.installInfo != nil {
-            let layoutConstraints = self.installInfo!.layoutConstraints.allObjects as! [LayoutConstraint]
-            if layoutConstraints.count > 0 {
-                NSLayoutConstraint.activateConstraints(layoutConstraints)
-            }
-        } else {
+        guard self.installInfo != nil else {
             self.install()
+            return
+        }
+        #if SNAPKIT_DEPLOYMENT_LEGACY
+        guard #available(iOS 8.0, OSX 10.10, *) else {
+            self.install()
+            return
+        }
+        #endif
+        let layoutConstraints = self.installInfo!.layoutConstraints.allObjects as! [LayoutConstraint]
+        if layoutConstraints.count > 0 {
+            NSLayoutConstraint.activateConstraints(layoutConstraints)
         }
     }
     
     internal override func deactivate() -> Void {
-        if NSLayoutConstraint.respondsToSelector("deactivateConstraints:") && self.installInfo != nil {
-            let layoutConstraints = self.installInfo!.layoutConstraints.allObjects as! [LayoutConstraint]
-            if layoutConstraints.count > 0 {
-                NSLayoutConstraint.deactivateConstraints(layoutConstraints)
-            }
-        } else {
-            self.uninstall()
+        guard self.installInfo != nil else {
+            return
+        }
+        #if SNAPKIT_DEPLOYMENT_LEGACY
+        guard #available(iOS 8.0, OSX 10.10, *) else {
+            return
+        }
+        #endif
+        let layoutConstraints = self.installInfo!.layoutConstraints.allObjects as! [LayoutConstraint]
+        if layoutConstraints.count > 0 {
+            NSLayoutConstraint.deactivateConstraints(layoutConstraints)
         }
     }
     
@@ -191,23 +204,22 @@ internal class ConcreteConstraint: Constraint {
         self.priority = priority
     }
     
-    internal func installOnViewUpdatingExisting(updateExisting: Bool = false) -> [LayoutConstraint] {
+    internal func installOnView(updateExisting updateExisting: Bool = false, file: String? = nil, line: UInt? = nil) -> [LayoutConstraint] {
         var installOnView: View? = nil
         if self.toItem.view != nil {
             installOnView = closestCommonSuperviewFromView(self.fromItem.view, toView: self.toItem.view)
             if installOnView == nil {
-                NSException(name: "Cannot Install Constraint", reason: "No common superview between views", userInfo: nil).raise()
+                NSException(name: "Cannot Install Constraint", reason: "No common superview between views (@\(self.makerFile)#\(self.makerLine))", userInfo: nil).raise()
                 return []
             }
         } else {
-            installOnView = self.fromItem.view?.superview
-            if installOnView == nil {
-                if self.fromItem.attributes == ConstraintAttributes.Width || self.fromItem.attributes == ConstraintAttributes.Height {
-                    installOnView = self.fromItem.view
-                }
-                
+            
+            if self.fromItem.attributes.isSubsetOf(ConstraintAttributes.Width.union(.Height)) {
+                installOnView = self.fromItem.view
+            } else {
+                installOnView = self.fromItem.view?.superview
                 if installOnView == nil {
-                    NSException(name: "Cannot Install Constraint", reason: "Missing superview", userInfo: nil).raise()
+                    NSException(name: "Cannot Install Constraint", reason: "Missing superview (@\(self.makerFile)#\(self.makerLine))", userInfo: nil).raise()
                     return []
                 }
             }
@@ -215,7 +227,7 @@ internal class ConcreteConstraint: Constraint {
         
         if let installedOnView = self.installInfo?.view {
             if installedOnView != installOnView {
-                NSException(name: "Cannot Install Constraint", reason: "Already installed on different view.", userInfo: nil).raise()
+                NSException(name: "Cannot Install Constraint", reason: "Already installed on different view. (@\(self.makerFile)#\(self.makerLine))", userInfo: nil).raise()
                 return []
             }
             return self.installInfo?.layoutConstraints.allObjects as? [LayoutConstraint] ?? []
@@ -239,7 +251,11 @@ internal class ConcreteConstraint: Constraint {
             let layoutConstant: CGFloat = layoutToAttribute.snp_constantForValue(self.constant)
             
             // get layout to
-            var layoutTo: View? = self.toItem.view
+            #if os(iOS)
+            var layoutTo: AnyObject? = self.toItem.view ?? self.toItem.layoutSupport
+            #else
+            var layoutTo: AnyObject? = self.toItem.view
+            #endif
             if layoutTo == nil && layoutToAttribute != .Width && layoutToAttribute != .Height {
                 layoutTo = installOnView
             }

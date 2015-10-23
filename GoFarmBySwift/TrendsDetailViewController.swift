@@ -77,7 +77,7 @@ class TrendsDetailViewController: UIViewController, UITableViewDataSource, UITab
     //TrendsTableViewCell的代理方法
     func trendsTableViewCell(cell: TrendsTableViewCell, selectedItem item: NSInteger) {
         if item < cell.model!.imageArray.count {
-            print("选中了第\(item)个Item")
+            print("选中了第\(item)个Item", terminator: "")
         }
     }
     

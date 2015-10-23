@@ -8,12 +8,11 @@
 
 import UIKit
 
-class CategoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CategorySiftViewDelegate {
+class CategoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var category: String?                   //类型
     var tableView: UITableView?             //
     var dataSource: NSMutableArray = []     //数据源
-    var siftView: CategorySiftView?         //筛选view
     var headView: UIView?                   //滚动视图的父视图
     
     override func viewDidLoad() {
@@ -22,7 +21,6 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         self.title = category
         
         createNavItem()
-        createSiftView()
         createTableView()
         createTableHeadView()
         obtainDataSource()
@@ -37,15 +35,15 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     //获取数据源
     func obtainDataSource() {
         for _ in 0 ..< 5 {
-            let model = FarmModel()
-            model.farmImageUrl = "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg"
-            model.farmTitle = "休闲胜地"
-            model.farmAddress = "景秀江南"
-            model.farmCategory = "度假村"
-            model.farmLocation = "102.222, 33.213"
-            model.farmDistence = "1000m"
-            model.farmStart = 3.5
-            model.farmPriceDetail = "农家饭十人餐 仅售120元"
+            let model = StoreModel()
+//            model.farmImageUrl = "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg"
+//            model.farmTitle = "休闲胜地"
+//            model.farmAddress = "景秀江南"
+//            model.farmCategory = "度假村"
+//            model.farmLocation = "102.222, 33.213"
+//            model.farmDistence = "1000m"
+//            model.farmStart = 3.5
+//            model.farmPriceDetail = "农家饭十人餐 仅售120元"
             dataSource.addObject(model)
         }
         tableView!.reloadData()
@@ -59,21 +57,6 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         let rightSearchItem = UIBarButtonItem(title: "搜索", style: .Plain, target: self, action: "actionSearch")
         let rightMapLocationItem = UIBarButtonItem(title: "地图", style: .Plain, target: self, action: "actionMapLocation")
         self.navigationItem.rightBarButtonItems = [rightSearchItem, rightMapLocationItem]
-    }
-    
-    //创建siftView
-    func createSiftView() {
-        siftView = CategorySiftView()
-        siftView!.delegate =  self
-        siftView!.backgroundColor = UIColor.whiteColor()
-        view.addSubview(siftView!)
-        siftView?.reloadDataSource(["农庄", "地区", "排序"], images: ["", "", ""])
-        siftView!.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(64)
-            make.left.equalTo(0)
-            make.right.equalTo(0)
-            make.height.equalTo(30)
-        }
     }
     
     func createTableHeadView() {
@@ -100,13 +83,13 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         tableView!.delegate = self
         tableView!.dataSource = self
         tableView!.separatorStyle = .None
-        tableView!.registerClass(CategoryTableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
+        tableView!.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
         tableView!.backgroundColor = UIColor.whiteColor()
         tableView!.tableHeaderView = headView
         tableView!.tableFooterView = UIView()
         self.view.addSubview(tableView!)
         tableView!.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(siftView!.snp_bottom)
+            make.top.equalTo(0)
             make.left.equalTo(0)
             make.bottom.equalTo(0)
             make.right.equalTo(0)
@@ -128,7 +111,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     //CategorySiftView的代理方法
     func categorySiftViewOnCilckButton(index: NSInteger) {
-        print("点击了第\(index)个按钮")
+        print("点击了第\(index)个按钮", terminator: "")
     }
     
     //tableView的代理方法
@@ -137,10 +120,12 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell") as! CategoryTableViewCell
-        cell.model = dataSource[indexPath.row] as? FarmModel
+        var cell = tableView.dequeueReusableCellWithIdentifier("cell")
+        if cell == nil {
+            cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
+        }
         
-        return cell
+        return cell!
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -149,7 +134,6 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let spotDetailVC = SpotDetailViewController()
-        spotDetailVC.model = dataSource[indexPath.row] as? FarmModel
         self.navigationController!.showViewController(spotDetailVC, sender: nil)
     }
     

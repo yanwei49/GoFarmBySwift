@@ -112,7 +112,7 @@ public class ImageCache {
         memoryCache.name = cacheName
         
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        diskCachePath = paths.first!.stringByAppendingPathComponent(cacheName)
+        diskCachePath = (paths.first! as NSString).stringByAppendingPathComponent(cacheName)
         
         ioQueue = dispatch_queue_create(ioQueueName + name, DISPATCH_QUEUE_SERIAL)
         processQueue = dispatch_queue_create(processQueueName + name, DISPATCH_QUEUE_CONCURRENT)
@@ -139,21 +139,27 @@ public extension ImageCache {
     instead.
     
     - parameter image: The image will be stored.
+    - parameter originalData: The original data of the image.
+                Kingfisher will use it to check the format of the image and optimize cache size on disk.
+                If `nil` is supplied, the image data will be saved as a normalized PNG file.
     - parameter key:   Key for the image.
     */
-    public func storeImage(image: UIImage, forKey key: String) {
-        storeImage(image, forKey: key, toDisk: true, completionHandler: nil)
+    public func storeImage(image: UIImage, originalData: NSData? = nil, forKey key: String) {
+        storeImage(image, originalData: originalData,forKey: key, toDisk: true, completionHandler: nil)
     }
     
     /**
     Store an image to cache. It is an async operation.
     
     - parameter image:             The image will be stored.
+    - parameter originalData:      The original data of the image.
+                                   Kingfisher will use it to check the format of the image and optimize cache size on disk.
+                                   If `nil` is supplied, the image data will be saved as a normalized PNG file.
     - parameter key:               Key for the image.
     - parameter toDisk:            Whether this image should be cached to disk or not. If false, the image will be only cached in memory.
     - parameter completionHandler: Called when stroe operation completes.
     */
-    public func storeImage(image: UIImage, forKey key: String, toDisk: Bool, completionHandler: (() -> ())?) {
+    public func storeImage(image: UIImage, originalData: NSData? = nil, forKey key: String, toDisk: Bool, completionHandler: (() -> ())?) {
         memoryCache.setObject(image, forKey: key, cost: image.kf_imageCost)
         
         func callHandlerInMainQueue() {
@@ -166,7 +172,21 @@ public extension ImageCache {
         
         if toDisk {
             dispatch_async(ioQueue, { () -> Void in
-                if let data = UIImagePNGRepresentation(image) {
+                let imageFormat: ImageFormat
+                if let originalData = originalData {
+                    imageFormat = originalData.kf_imageFormat
+                } else {
+                    imageFormat = .Unknown
+                }
+                
+                let data: NSData?
+                switch imageFormat {
+                case .PNG: data = UIImagePNGRepresentation(image)
+                case .JPEG: data = UIImageJPEGRepresentation(image, 1.0)
+                case .Unknown: data = UIImagePNGRepresentation(image.kf_normalizedImage())
+                }
+                
+                if let data = data {
                     if !self.fileManager.fileExistsAtPath(self.diskCachePath) {
                         do {
                             try self.fileManager.createDirectoryAtPath(self.diskCachePath, withIntermediateDirectories: true, attributes: nil)
@@ -233,40 +253,41 @@ extension ImageCache {
     Get an image for a key from memory or disk.
     
     - parameter key:               Key for the image.
-    - parameter options:           Options of retriving image.
+    - parameter options:           Options of retrieving image.
     - parameter completionHandler: Called when getting operation completes with image result and cached type of this image. If there is no such key cached, the image will be `nil`.
     
-    - returns: The retriving task.
+    - returns: The retrieving task.
     */
     public func retrieveImageForKey(key: String, options:KingfisherManager.Options, completionHandler: ((UIImage?, CacheType!) -> ())?) -> RetrieveImageDiskTask? {
         // No completion handler. Not start working and early return.
         guard let completionHandler = completionHandler else {
-            return dispatch_block_create(DISPATCH_BLOCK_INHERIT_QOS_CLASS) {}
+            return nil
         }
         
-        let block = dispatch_block_create(DISPATCH_BLOCK_INHERIT_QOS_CLASS) {
-            if let image = self.retrieveImageInMemoryCacheForKey(key) {
-                
-                //Found image in memory cache.
-                if options.shouldDecode {
-                    dispatch_async(self.processQueue, { () -> Void in
-                        let result = image.kf_decodedImage()
-                        dispatch_async(options.queue, { () -> Void in
-                            completionHandler(result, .Memory)
-                        })
+        var block: RetrieveImageDiskTask?
+        if let image = self.retrieveImageInMemoryCacheForKey(key) {
+            
+            //Found image in memory cache.
+            if options.shouldDecode {
+                dispatch_async(self.processQueue, { () -> Void in
+                    let result = image.kf_decodedImage(scale: options.scale)
+                    dispatch_async(options.queue, { () -> Void in
+                        completionHandler(result, .Memory)
                     })
-                } else {
-                    completionHandler(image, .Memory)
-                }
+                })
             } else {
+                completionHandler(image, .Memory)
+            }
+        } else {
+            block = dispatch_block_create(DISPATCH_BLOCK_INHERIT_QOS_CLASS) {
                 //Begin to load image from disk
                 dispatch_async(self.ioQueue, { () -> Void in
                     
-                    if let image = self.retrieveImageInDiskCacheForKey(key) {
+                    if let image = self.retrieveImageInDiskCacheForKey(key, scale: options.scale) {
                         
                         if options.shouldDecode {
                             dispatch_async(self.processQueue, { () -> Void in
-                                let result = image.kf_decodedImage()
+                                let result = image.kf_decodedImage(scale: options.scale)
                                 self.storeImage(result!, forKey: key, toDisk: false, completionHandler: nil)
                                 
                                 dispatch_async(options.queue, { () -> Void in
@@ -288,9 +309,9 @@ extension ImageCache {
                     }
                 })
             }
+            dispatch_async(dispatch_get_main_queue(), block!)
         }
-        
-        dispatch_async(dispatch_get_main_queue(), block)
+    
         return block
     }
     
@@ -309,11 +330,12 @@ extension ImageCache {
     Get an image for a key from disk.
     
     - parameter key: Key for the image.
-    
+    - param scale: The scale factor to assume when interpreting the image data.
+
     - returns: The image object if it is cached, or `nil` if there is no such key in the cache.
     */
-    public func retrieveImageInDiskCacheForKey(key: String) -> UIImage? {
-        return diskImageForKey(key)
+    public func retrieveImageInDiskCacheForKey(key: String, scale: CGFloat = KingfisherManager.DefaultOptions.scale) -> UIImage? {
+        return diskImageForKey(key, scale: scale)
     }
 }
 
@@ -391,8 +413,8 @@ extension ImageCache {
                         do {
                             let resourceValues = try fileURL.resourceValuesForKeys(resourceKeys)
                             // If it is a Directory. Continue to next file URL.
-                            if let isDirectory = resourceValues[NSURLIsDirectoryKey]?.boolValue {
-                                if isDirectory {
+                            if let isDirectory = resourceValues[NSURLIsDirectoryKey] as? NSNumber {
+                                if isDirectory.boolValue {
                                     continue
                                 }
                             }
@@ -593,9 +615,9 @@ public extension ImageCache {
 // MARK: - Internal Helper
 extension ImageCache {
     
-    func diskImageForKey(key: String) -> UIImage? {
+    func diskImageForKey(key: String, scale: CGFloat) -> UIImage? {
         if let data = diskImageDataForKey(key) {
-            if let image = UIImage(data: data) {
+            if let image = UIImage(data: data, scale: scale) {
                 return image
             } else {
                 return nil
@@ -612,7 +634,7 @@ extension ImageCache {
     
     func cachePathForKey(key: String) -> String {
         let fileName = cacheFileNameForKey(key)
-        return diskCachePath.stringByAppendingPathComponent(fileName)
+        return (diskCachePath as NSString).stringByAppendingPathComponent(fileName)
     }
     
     func cacheFileNameForKey(key: String) -> String {
@@ -624,6 +646,32 @@ extension UIImage {
     var kf_imageCost: Int {
         return Int(size.height * size.width * scale * scale)
     }
+}
+
+private let pngHeader: [UInt8] = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]
+private let jpgHeaderSOI: [UInt8] = [0xFF, 0xD8]
+private let jpgHeaderIF: [UInt8] = [0xFF, 0xE0]
+
+extension NSData {
+    var kf_imageFormat: ImageFormat {
+        var buffer = [UInt8](count: 8, repeatedValue: 0)
+        self.getBytes(&buffer, length: 8)
+        if buffer == pngHeader {
+            return .PNG
+        } else if buffer[0] == jpgHeaderSOI[0] &&
+                  buffer[1] == jpgHeaderSOI[1] &&
+                  buffer[2] == jpgHeaderIF[0] &&
+                  buffer[3] == buffer[3] & jpgHeaderIF[1]
+        {
+            return .JPEG
+        }
+        
+        return .Unknown
+    }
+}
+
+enum ImageFormat {
+    case Unknown, PNG, JPEG
 }
 
 extension Dictionary {

@@ -42,10 +42,11 @@ class TrendsDisplayPhotoView: UIView, UICollectionViewDataSource, UICollectionVi
         }
     }
 
-    required init(coder aDecoder: NSCoder) {
+
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     //collectionView的代理方法
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource.count/3*3+3

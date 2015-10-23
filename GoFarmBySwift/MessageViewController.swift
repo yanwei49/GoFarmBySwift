@@ -61,7 +61,7 @@ class MessageViewController: RCConversationListViewController, RCIMReceiveMessag
         rcduserinfo.userName = "yw3"
         rcduserinfo.userId = "yw3"
         rcduserinfo.portraitUri = "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg";
-        model.conversationModelType = RCConversationModelType._CONVERSATION_MODEL_TYPE_CUSTOMIZATION
+        model.conversationModelType = .CONVERSATION_MODEL_TYPE_CUSTOMIZATION
         model.extend = rcduserinfo;
         friendsArray!.addObject(model)
     }
