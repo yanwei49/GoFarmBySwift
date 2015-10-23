@@ -38,6 +38,9 @@
 		7767E24D1B5011BB00481661 /* WritetrendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7767E24C1B5011BB00481661 /* WritetrendsViewController.swift */; };
 		777461981B4FA2AB00E5A882 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777461971B4FA2AB00E5A882 /* TabBarView.swift */; };
 		7774619A1B4FAA1200E5A882 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777461991B4FAA1200E5A882 /* CategoryViewController.swift */; };
+		77C6C5011BDA92590095DB9A /* HotProductTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C6C5001BDA92590095DB9A /* HotProductTableViewCell.swift */; };
+		77C6C5031BDA937A0095DB9A /* Define.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C6C5021BDA937A0095DB9A /* Define.swift */; };
+		77C6C5051BDA97530095DB9A /* HotProductCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C6C5041BDA97530095DB9A /* HotProductCollectionViewCell.swift */; };
 		77D2AF791B4D1232008D06CB /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D2AF781B4D1232008D06CB /* CommentTableViewCell.swift */; };
 		77FA61F11B54934300931173 /* AvatorStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA61F01B54934300931173 /* AvatorStateView.swift */; };
 		77FA61F31B549E4E00931173 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA61F21B549E4E00931173 /* LoginViewController.swift */; };
@@ -104,6 +107,9 @@
 		7767E24C1B5011BB00481661 /* WritetrendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WritetrendsViewController.swift; sourceTree = "<group>"; };
 		777461971B4FA2AB00E5A882 /* TabBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		777461991B4FAA1200E5A882 /* CategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		77C6C5001BDA92590095DB9A /* HotProductTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HotProductTableViewCell.swift; sourceTree = "<group>"; };
+		77C6C5021BDA937A0095DB9A /* Define.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Define.swift; sourceTree = "<group>"; };
+		77C6C5041BDA97530095DB9A /* HotProductCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HotProductCollectionViewCell.swift; sourceTree = "<group>"; };
 		77D2AF781B4D1232008D06CB /* CommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		77FA61F01B54934300931173 /* AvatorStateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatorStateView.swift; sourceTree = "<group>"; };
 		77FA61F21B549E4E00931173 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +151,7 @@
 			children = (
 				56EFCFEE1BD9C616008D3CF7 /* model */,
 				56EFD02B1BD9D237008D3CF7 /* DataBaseManager.swift */,
+				77C6C5021BDA937A0095DB9A /* Define.swift */,
 			);
 			name = comman;
 			sourceTree = "<group>";
@@ -289,6 +296,8 @@
 			isa = PBXGroup;
 			children = (
 				771063F91B4E1CA200308C38 /* RepeatRollView.swift */,
+				77C6C5001BDA92590095DB9A /* HotProductTableViewCell.swift */,
+				77C6C5041BDA97530095DB9A /* HotProductCollectionViewCell.swift */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -604,8 +613,10 @@
 				7774619A1B4FAA1200E5A882 /* CategoryViewController.swift in Sources */,
 				77161B9F1B4BD1DA00DB20E8 /* FileHead.swift in Sources */,
 				77161B801B4A226500DB20E8 /* TrendsViewController.swift in Sources */,
+				77C6C5051BDA97530095DB9A /* HotProductCollectionViewCell.swift in Sources */,
 				77FA61F11B54934300931173 /* AvatorStateView.swift in Sources */,
 				77161B4A1B4A1DEF00DB20E8 /* AppDelegate.swift in Sources */,
+				77C6C5011BDA92590095DB9A /* HotProductTableViewCell.swift in Sources */,
 				77161B7C1B4A226500DB20E8 /* FarmViewController.swift in Sources */,
 				77161B7D1B4A226500DB20E8 /* FirstViewController.swift in Sources */,
 				77161B971B4BBF0400DB20E8 /* FarmerTableViewCell.swift in Sources */,
@@ -613,6 +624,7 @@
 				7767E24B1B50103400481661 /* SpotDetailViewController.swift in Sources */,
 				77FA61F71B54C38900931173 /* UserInfosViewController.swift in Sources */,
 				56EFCFED1BD9C5A9008D3CF7 /* ProductModel.swift in Sources */,
+				77C6C5031BDA937A0095DB9A /* Define.swift in Sources */,
 				77161BA21B4BD30300DB20E8 /* TrendsModel.swift in Sources */,
 				77FA61F31B549E4E00931173 /* LoginViewController.swift in Sources */,
 				77161BA41B4C19A600DB20E8 /* TrendsDetailViewController.swift in Sources */,
