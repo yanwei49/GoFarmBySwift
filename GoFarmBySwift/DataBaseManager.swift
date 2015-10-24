@@ -75,6 +75,7 @@ class DataBaseManager: NSObject {
         try! db.run(alice.update(userName <- user.userName, userAccount <- user.userAccount))
         //局部替换，替换属性中全部的一个字符或字符串
 //        try! db.run(alice.update(userName <- userName.replace("i", with: "z")))
+        
     }
     
     //删除用户

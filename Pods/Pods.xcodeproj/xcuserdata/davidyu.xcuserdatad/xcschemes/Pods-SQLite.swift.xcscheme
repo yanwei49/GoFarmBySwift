@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8E11212064724AB2CF068E66"
+               BlueprintIdentifier = "B6BA8D384D7CBBEBED52CA4C"
                BuildableName = "SQLite.framework"
                BlueprintName = "Pods-SQLite.swift"
                ReferencedContainer = "container:Pods.xcodeproj">

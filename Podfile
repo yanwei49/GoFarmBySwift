@@ -7,8 +7,7 @@ pod 'Kingfisher'
 pod 'SnapKit'
 
 pod 'RongCloudIMKit'
-pod 'SQLite.swift',
-  git: 'https://github.com/stephencelis/SQLite.swift.git'
+pod 'SQLite.swift',git: 'https://github.com/stephencelis/SQLite.swift.git'
 
 
 
