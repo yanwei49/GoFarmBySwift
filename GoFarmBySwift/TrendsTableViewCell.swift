@@ -180,7 +180,7 @@ class TrendsTableViewCell: UITableViewCell {
             for comment in model.trendsCommentArray {
                 commentStr += "\(comment.commentUser.userName)：\(comment.commentContent)\n"
             }
-            commentStr = NSString(commentStr).substringToIndex(commentStr.characters.count-2)
+            commentStr = NSString(string: commentStr).substringToIndex(commentStr.characters.count-2)
             let size = commentStr.boundingRectWithSize(CGSizeMake(UIScreen.mainScreen().bounds.width-20, 10000), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(14)], context: nil).size
             totalHeight += size.height
         }
