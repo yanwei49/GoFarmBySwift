@@ -10,9 +10,9 @@ import UIKit
 
 class TrendsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TrendsTableViewCellDelegate {
 
-    var tableView: UITableView?
-    var dataSource = [TrendsModel]()
-    var seg: UISegmentedControl?
+    var tableView: UITableView!
+    var dataSource: [TrendsModel] = []
+    var seg: UISegmentedControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,11 +43,11 @@ class TrendsViewController: UIViewController, UITableViewDataSource, UITableView
     //创建seg
     func createSeg() {
         seg = UISegmentedControl(items: ["附近", "好友"])
-        seg!.selectedSegmentIndex = 0
-        seg!.tintColor = UIColor.purpleColor()
-        seg!.addTarget(self, action: "actionValueChange", forControlEvents: .TouchUpInside)
-        view.addSubview(seg!)
-        seg!.snp_makeConstraints { (make) -> Void in
+        seg.selectedSegmentIndex = 0
+        seg.tintColor = UIColor.purpleColor()
+        seg.addTarget(self, action: "actionValueChange", forControlEvents: .TouchUpInside)
+        view.addSubview(seg)
+        seg.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(64)
             make.left.equalTo(0)
             make.height.equalTo(30)
@@ -58,13 +58,14 @@ class TrendsViewController: UIViewController, UITableViewDataSource, UITableView
     //创建tableView
     func createtableView() {
         tableView = UITableView(frame: CGRectZero, style: .Plain)
-        tableView!.backgroundColor = UIColor.whiteColor()
-        tableView!.tableFooterView = UIView()
-        tableView!.delegate = self
-        tableView!.dataSource = self
-        self.view.addSubview(tableView!)
-        tableView!.registerClass(TrendsTableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
-        tableView!.snp_makeConstraints { (make) -> Void in
+        tableView.backgroundColor = UIColor.whiteColor()
+        tableView.separatorStyle = .None
+        tableView.tableFooterView = UIView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        self.view.addSubview(tableView)
+        tableView.registerClass(TrendsTableViewCell.classForCoder(), forCellReuseIdentifier: "cell")
+        tableView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(seg!.snp_bottom)
             make.left.equalTo(0)
             make.bottom.equalTo(0)
@@ -80,19 +81,19 @@ class TrendsViewController: UIViewController, UITableViewDataSource, UITableView
             user.portraitUri = "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg"
             user.userName = "yanwei"
             model.trendsUser = user
-            model.imageArray = ["https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg", "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg",
+            model.trendsImageArray = ["https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg", "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg",
                 "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg",
                 "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg",
                 "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg"]
-            model.sendTime = "2015-07-05"
-            model.sendContent = "z这个地方还不错，值得一去"
-            model.inspectNums = 4
-            model.supportNums = 10
+            model.trendsSendTime = "2015-07-05"
+            model.trendsSendContent = "z这个地方还不错，值得一去"
             let comment = CommentModel()
             comment.commentContent = "值得一游"
             comment.commentUser = user
             comment.commentTime = "2015-07-05"
-            model.commentArray = [comment]
+            comment.commentTrends = model
+            model.trendsCommentArray = [comment]
+            
             dataSource.append(model)
         }
     }
@@ -114,9 +115,8 @@ class TrendsViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell") as! TrendsTableViewCell
-        cell.delegate = self
+//        cell.delegate = self
         cell.model = dataSource[indexPath.row]
-//        cell.reloadCellDataSource(dataSource[indexPath.row])
         
         return cell
     }
@@ -134,7 +134,7 @@ class TrendsViewController: UIViewController, UITableViewDataSource, UITableView
     
     //TrendsTableViewCell的代理方法
     func trendsTableViewCell(cell: TrendsTableViewCell, selectedItem item: NSInteger) {
-        if item < cell.model!.imageArray.count {
+        if item < cell.model!.trendsImageArray.count {
             print("选中了第\(item)个Item", terminator: "")
         }else {
             let trendsDetailVC = TrendsDetailViewController()

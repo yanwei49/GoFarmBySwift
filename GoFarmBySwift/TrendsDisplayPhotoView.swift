@@ -16,8 +16,12 @@ protocol TrendsDisplayPhotoViewDelegate {
 class TrendsDisplayPhotoView: UIView, UICollectionViewDataSource, UICollectionViewDelegate {
 
     var delegate: TrendsDisplayPhotoViewDelegate?
-    var  collectionView: UICollectionView?
-    var  dataSource: NSArray = [String]()
+    var  collectionView: UICollectionView!
+    var  dataSource: [String]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,12 +33,12 @@ class TrendsDisplayPhotoView: UIView, UICollectionViewDataSource, UICollectionVi
         layout.itemSize = CGSizeMake((UIScreen.mainScreen().bounds.width-20-10)/3, (UIScreen.mainScreen().bounds.width-20-10)/3)
         
         collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
-        collectionView!.backgroundColor = UIColor.whiteColor()
-        collectionView!.registerClass(UICollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "cell")
-        collectionView!.delegate = self
-        collectionView!.dataSource = self
-        self.addSubview(collectionView!)
-        collectionView!.snp_makeConstraints { (make) -> Void in
+        collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView.registerClass(UICollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "cell")
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        self.addSubview(collectionView)
+        collectionView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(0)
             make.left.equalTo(0)
             make.bottom.equalTo(0)
@@ -49,15 +53,15 @@ class TrendsDisplayPhotoView: UIView, UICollectionViewDataSource, UICollectionVi
 
     //collectionView的代理方法
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.count/3*3+3
+        return dataSource!.count/3*3+3
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as UICollectionViewCell
         let imageView = UIImageView(frame: cell.bounds)
         imageView.backgroundColor = UIColor.greenColor()
-        if  indexPath.item < dataSource.count {
-            let string = dataSource[indexPath.row] as! String
+        if  indexPath.item < dataSource!.count {
+            let string = dataSource![indexPath.row]
             let url = NSURL(string: string)
             imageView.kf_setImageWithURL(url!, placeholderImage: UIImage(named: ""))
         }

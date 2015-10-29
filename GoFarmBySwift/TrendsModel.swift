@@ -10,12 +10,13 @@ import Foundation
 
 class TrendsModel: NSObject {
     
-    var trendsUser: UserModel = UserModel()    //发动态的用户
-    var sendTime: String = ""                  //发送时间
-    var sendContent: String = ""               //发送内容
-    var imageArray: NSArray = [String]()       //发送的图片数组
-    var inspectNums: Int = 0                   //浏览的次数
-    var supportNums: Int = 0                   //赞的次数
-    var commentArray: NSArray = []             //评论模型
+    var trendsUser = UserModel()                   //发动态的用户
+    var trendsId = ""                              //动态id
+    var trendsSendTime = ""                        //发送时间
+    var trendsSendContent = ""                     //发送内容
+    var trendsImageArray = [String]()              //发送的图片数组
+    var trendsSupportNums = ""                     //点赞数
+    var trendsIsSupport = false                    //是否点赞
+    var trendsCommentArray: [CommentModel] = []    //评论列表
     
 }

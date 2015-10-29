@@ -40,21 +40,20 @@ class TrendsDetailViewController: UIViewController, UITableViewDataSource, UITab
     
     //tableView代理方法
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1 + model!.commentArray.count
+        return 1 + model!.trendsCommentArray.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let trendCell = tableView.dequeueReusableCellWithIdentifier("trendCell") as! TrendsTableViewCell
             trendCell.delegate = self
-            trendCell.type = .TrendsDetailType
             trendCell.model = model!
 //            trendCell.reloadCellDataSource(model!)
 
             return trendCell
         }else {
             let commentCell = tableView.dequeueReusableCellWithIdentifier("commentCell") as! CommentTableViewCell
-            commentCell.reloadDataForCell(model!.commentArray[indexPath.row-1] as! CommentModel)
+            commentCell.reloadDataForCell(model!.trendsCommentArray[indexPath.row-1])
             
             return commentCell
         }
@@ -64,7 +63,7 @@ class TrendsDetailViewController: UIViewController, UITableViewDataSource, UITab
         if indexPath.row == 0 {
             return TrendsTableViewCell.cellForHeightWithTrendModel(model!, type: .TrendsDetailType)
         }else {
-            return CommentTableViewCell.cellForHeight(model!.commentArray[indexPath.row-1] as! CommentModel)
+            return CommentTableViewCell.cellForHeight(model!.trendsCommentArray[indexPath.row-1])
         }
     }
     
@@ -76,7 +75,7 @@ class TrendsDetailViewController: UIViewController, UITableViewDataSource, UITab
     
     //TrendsTableViewCell的代理方法
     func trendsTableViewCell(cell: TrendsTableViewCell, selectedItem item: NSInteger) {
-        if item < cell.model!.imageArray.count {
+        if item < cell.model!.trendsImageArray.count {
             print("选中了第\(item)个Item", terminator: "")
         }
     }
