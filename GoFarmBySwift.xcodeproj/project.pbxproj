@@ -11,6 +11,8 @@
 		56EFCFEB1BD9C59D008D3CF7 /* StoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EFCFEA1BD9C59D008D3CF7 /* StoreModel.swift */; };
 		56EFCFED1BD9C5A9008D3CF7 /* ProductModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EFCFEC1BD9C5A9008D3CF7 /* ProductModel.swift */; };
 		56EFD02C1BD9D237008D3CF7 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EFD02B1BD9D237008D3CF7 /* DataBaseManager.swift */; };
+		56F753641BEC26EC0096E0D1 /* HttpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F753631BEC26EC0096E0D1 /* HttpManager.swift */; };
+		56F753661BEC26FB0096E0D1 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F753651BEC26FB0096E0D1 /* Parser.swift */; };
 		7706CBE91B515D1A00DB5DFC /* ShopDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7706CBE81B515D1A00DB5DFC /* ShopDetailViewController.swift */; };
 		771063FA1B4E1CA200308C38 /* RepeatRollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771063F91B4E1CA200308C38 /* RepeatRollView.swift */; };
 		77161B4A1B4A1DEF00DB20E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77161B491B4A1DEF00DB20E8 /* AppDelegate.swift */; };
@@ -72,6 +74,8 @@
 		56EFCFEA1BD9C59D008D3CF7 /* StoreModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreModel.swift; sourceTree = "<group>"; };
 		56EFCFEC1BD9C5A9008D3CF7 /* ProductModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductModel.swift; sourceTree = "<group>"; };
 		56EFD02B1BD9D237008D3CF7 /* DataBaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
+		56F753631BEC26EC0096E0D1 /* HttpManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpManager.swift; sourceTree = "<group>"; };
+		56F753651BEC26FB0096E0D1 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		6C3FB21E78283F49C6F6BDF5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		7706CBE81B515D1A00DB5DFC /* ShopDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopDetailViewController.swift; sourceTree = "<group>"; };
 		771063F91B4E1CA200308C38 /* RepeatRollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatRollView.swift; sourceTree = "<group>"; };
@@ -152,6 +156,8 @@
 				56EFCFEE1BD9C616008D3CF7 /* model */,
 				56EFD02B1BD9D237008D3CF7 /* DataBaseManager.swift */,
 				77C6C5021BDA937A0095DB9A /* Define.swift */,
+				56F753631BEC26EC0096E0D1 /* HttpManager.swift */,
+				56F753651BEC26FB0096E0D1 /* Parser.swift */,
 			);
 			name = comman;
 			sourceTree = "<group>";
@@ -612,6 +618,7 @@
 				56EFD02C1BD9D237008D3CF7 /* DataBaseManager.swift in Sources */,
 				7774619A1B4FAA1200E5A882 /* CategoryViewController.swift in Sources */,
 				77161B9F1B4BD1DA00DB20E8 /* FileHead.swift in Sources */,
+				56F753641BEC26EC0096E0D1 /* HttpManager.swift in Sources */,
 				77161B801B4A226500DB20E8 /* TrendsViewController.swift in Sources */,
 				77C6C5051BDA97530095DB9A /* HotProductCollectionViewCell.swift in Sources */,
 				77FA61F11B54934300931173 /* AvatorStateView.swift in Sources */,
@@ -640,6 +647,7 @@
 				77161BAC1B4CDACA00DB20E8 /* UserModel.swift in Sources */,
 				77FA61FB1B54C52C00931173 /* MyTableViewCell.swift in Sources */,
 				56EFCFEB1BD9C59D008D3CF7 /* StoreModel.swift in Sources */,
+				56F753661BEC26FB0096E0D1 /* Parser.swift in Sources */,
 				771063FA1B4E1CA200308C38 /* RepeatRollView.swift in Sources */,
 				77FA61F51B549E6700931173 /* RegisterViewController.swift in Sources */,
 				7706CBE91B515D1A00DB5DFC /* ShopDetailViewController.swift in Sources */,

@@ -68,18 +68,19 @@ class TrendsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(seg!.snp_bottom)
             make.left.equalTo(0)
-            make.bottom.equalTo(0)
+            make.bottom.equalTo(-49)
             make.right.equalTo(0)
         }
     }
     
     //获取数据源
     func obtainDataSource() {
-        for _ in 0 ..< 2 {
+        for i in 0 ..< 2 {
             let model = TrendsModel()
             let user = UserModel()
             user.portraitUri = "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg"
             user.userName = "yanwei"
+            model.trendsId = "\(i)"
             model.trendsUser = user
             model.trendsImageArray = ["https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg", "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg",
                 "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg",
@@ -91,7 +92,7 @@ class TrendsViewController: UIViewController, UITableViewDataSource, UITableView
             comment.commentContent = "值得一游"
             comment.commentUser = user
             comment.commentTime = "2015-07-05"
-            comment.commentTrends = model
+            comment.commentRelationId = model.trendsId
             model.trendsCommentArray = [comment]
             
             dataSource.append(model)

@@ -32,12 +32,12 @@ class AvatorStateView: UIView {
     
     var delegate: AvatorStateViewDelegate?
     
-    var userModel: UserModel! {
+    var user: UserModel! {
         didSet {
-            avatorImageView.kf_setImageWithURL(NSURL(string: (userModel.portraitUri))!, placeholderImage: UIImage(named: ""))
-            nickNameLabel.text = userModel.userName
-            accountLabel.text = "农庄号:" + "\(userModel.userAccount)"
-            introduceLabel.text = "个人说明:" + "\(userModel.userInfos)"
+            avatorImageView.kf_setImageWithURL(NSURL(string: (user.portraitUri))!, placeholderImage: UIImage(named: ""))
+            nickNameLabel.text = user.userName
+            accountLabel.text = "农庄号:" + "\(user.account)"
+            introduceLabel.text = "个人说明:" + "\(user.infos)"
         }
     }
     //登陆状态

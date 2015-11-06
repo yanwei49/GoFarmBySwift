@@ -10,13 +10,23 @@ import Foundation
 
 class StoreModel: NSObject {
     
-    var storeTitle: String = ""     //农庄名称
-    var storeStart: Double = 0      //农庄星级
-    var storeLocation: String = ""  //农庄经纬度
-    var storeAddress: String = ""   //农庄地址
-    var storeDistence: String = ""  //农庄距离
-    var storeCategory: String = ""  //农庄分类
-    var storePriceDetail: String = ""   //价格
-    var storeImageUrl: String = ""  //农庄图片
-
+    var storeId = ""                              //商铺的ID
+    var storeName = ""                            //商铺的名称
+    var storeStars = ""                           //商铺的星级
+    var toreRelateType = ""                       //商铺的关系类型(1、推荐 2、合作 3、认证  4、邀请)
+    var storeAddress = ""                         //商铺的地址
+    var storeTel = ""                             //商铺的电话
+    var storeType = ""                            //商铺的类型
+    var storeCommentCount = ""                    //商铺的评论数量
+    var toreQty = ""                              //商铺的总销售
+    var storeEnterDate = ""                       //商铺的入驻日期
+    var storeState = ""                           //商铺的入住状态（3：未入住，1：入住，2：销户）
+    var storeCollectState = ""                    //商铺的收藏状态
+    var storeLatitude = ""                        //商铺的纬度
+    var storeLongitude = ""                       //商铺的经度
+    var storeDistance = ""                        //商铺的位置距离(与用户当前的位置)
+    var storeImagesArray = [String]()             //商铺的图片列表
+    var storeProductsArray = [ProductModel]()     //商铺的产品列表
+    var storeCommentsArray = [CommentModel]()     //商铺的评论列表
+    var storeTagsArray = [String]()               //商铺的标签列表
 }

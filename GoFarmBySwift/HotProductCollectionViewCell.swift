@@ -57,7 +57,7 @@ class HotProductCollectionViewCell: UICollectionViewCell {
         cPriceLable.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(nameLable.snp_bottom)
             make.height.equalTo(20)
-            make.width.equalTo(Define().width/6)
+            make.width.equalTo(Device_Width/6)
             make.left.equalTo(0)
         }
         
@@ -71,14 +71,14 @@ class HotProductCollectionViewCell: UICollectionViewCell {
         oPriceLable.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(nameLable.snp_bottom)
             make.height.equalTo(20)
-            make.width.equalTo(Define().width/6)
+            make.width.equalTo(Device_Width/6)
             make.right.equalTo(0)
         }
         
     }
 
     func reloadData() {
-        imageView.kf_setImageWithURL(NSURL(string: (product?.productIconImages.first)!)!, placeholderImage: nil)
+        imageView.kf_setImageWithURL(NSURL(string: (product?.productImages.first)!)!, placeholderImage: nil)
         nameLable.text = product?.productName
         cPriceLable.text = "￥\((product?.productCurrentPrice)!)"
         oPriceLable.text = "￥\((product?.productOriginalPrice)!)"

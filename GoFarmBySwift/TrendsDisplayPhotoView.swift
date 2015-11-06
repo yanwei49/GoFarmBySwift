@@ -13,7 +13,7 @@ protocol TrendsDisplayPhotoViewDelegate {
     func trendsDisplayPhotoView(view: TrendsDisplayPhotoView, didSeletecdItem item: NSInteger)
 }
 
-class TrendsDisplayPhotoView: UIView, UICollectionViewDataSource, UICollectionViewDelegate {
+class TrendsDisplayPhotoView: UIView {
 
     var delegate: TrendsDisplayPhotoViewDelegate?
     var  collectionView: UICollectionView!
@@ -28,8 +28,8 @@ class TrendsDisplayPhotoView: UIView, UICollectionViewDataSource, UICollectionVi
         self.backgroundColor = UIColor.whiteColor()
         
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 5
+//        layout.minimumInteritemSpacing = 5
+//        layout.minimumLineSpacing = 5
         layout.itemSize = CGSizeMake((UIScreen.mainScreen().bounds.width-20-10)/3, (UIScreen.mainScreen().bounds.width-20-10)/3)
         
         collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
@@ -51,6 +51,9 @@ class TrendsDisplayPhotoView: UIView, UICollectionViewDataSource, UICollectionVi
         fatalError("init(coder:) has not been implemented")
     }
 
+}
+
+extension TrendsDisplayPhotoView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     //collectionView的代理方法
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource!.count/3*3+3
@@ -71,7 +74,16 @@ class TrendsDisplayPhotoView: UIView, UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-            delegate?.trendsDisplayPhotoView(self, didSeletecdItem: indexPath.item)
+        delegate?.trendsDisplayPhotoView(self, didSeletecdItem: indexPath.item)
     }
     
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 5
+    }
+
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 5
+    }
+
 }
+

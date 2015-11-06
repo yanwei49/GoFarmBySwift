@@ -23,7 +23,7 @@ class HotProductTableViewCell: UITableViewCell {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = 0
-        flowLayout.itemSize = CGSizeMake(Define().width/3, 140)
+        flowLayout.itemSize = CGSizeMake(Device_Width/3, 140)
         
         collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout:flowLayout)
         collectionView.registerClass(HotProductCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "item")

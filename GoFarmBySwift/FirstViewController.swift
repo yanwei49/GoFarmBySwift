@@ -7,44 +7,45 @@
 //
 
 import UIKit
+import AVFoundation
 
 class FirstViewController: UIViewController  {
 
     var tableView: UITableView!
     var tableHeader: UIView!
     var categoryView: UIView!
-    var dataSource: [ProductModel] = []
+    var products = [ProductModel]()
+    let dataBaseManager = DataBaseManager.shareInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        let database = DataBaseManager.shareInstance
-//        var users = [UserModel]()
-//        for i in 0..<2 {
-//            let user = UserModel()
-//            user.userId = "1"+"\(i)"
-//            user.userAccount = "888"+"\(i)"
-//            user.userName = "yanwei"+"\(i)"
-//            users.append(user)
-//        }
-////        database.insertUser(users)
-//        database.getUserList()
-//        
-//        let user = UserModel()
-//        user.userId = "10"
-//        user.userAccount = "2880"
-//        user.userName = "neimei0"
-//
-//        database.selectUserTable(user)
-//        
-//        database.getUserList()
-
+        
         view.backgroundColor = UIColor.whiteColor()
         self.title = "首页"
         
+        products = dataBaseManager.getHotProductList()
         createTableHeader()
         createTableView()
-        obtainDataSource()
+        
+//        requestHome()
+    }
+    
+    func requestHome() {
+        var parameters: [String: String]?
+        HttpManager.shareInstance.requestHomeData(parameters, successClosure: { (data) -> Void in
+                self.products = Parser.shareInstance.dataArrayWithData(data, type: "hotProducts") as! [ProductModel]
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                    self.dataBaseManager.deleteHotProductTable()
+                    self.dataBaseManager.insertHotProduct(self.products)
+                })
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.tableView.reloadData()
+                })
+            }, otherErrorClosure: { (data) -> Void in
+                print(data)
+            }) { (data) -> Void in
+                print(data)
+        }
     }
     
     //创建tableView的头部视图
@@ -105,20 +106,6 @@ class FirstViewController: UIViewController  {
             make.right.equalTo(0)
         }
     }
-    
-    //获取数据源
-    func obtainDataSource() {
-        for _ in 0 ..< 9 {
-            let model = ProductModel()
-            model.productIconImages = ["https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg"]
-            model.productName = "农家土鸡"
-            model.productOriginalPrice = "150"
-            model.productCurrentPrice = "100"
-            dataSource.append(model)
-        }
-        tableView.reloadData()
-    }
-    
 }
 
 extension FirstViewController: UITableViewDataSource, UITableViewDelegate {
@@ -131,7 +118,7 @@ extension FirstViewController: UITableViewDataSource, UITableViewDelegate {
             case 0, 1:
                 return 1
             default:
-                return dataSource.count
+                return products.count
         }
     }
     
@@ -139,10 +126,7 @@ extension FirstViewController: UITableViewDataSource, UITableViewDelegate {
         switch indexPath.section {
             case 0:
                 let cell = tableView.dequeueReusableCellWithIdentifier("hotProductCell") as! HotProductTableViewCell
-//                if cell == nil {
-//                    cell = HotProductTableViewCell(style: .Default, reuseIdentifier: "hotProductCell")
-//                }
-                cell.dataSource = dataSource
+                cell.dataSource = products
                 
                 return cell
             case 1:
@@ -159,14 +143,17 @@ extension FirstViewController: UITableViewDataSource, UITableViewDelegate {
                     cell = UITableViewCell(style: .Default, reuseIdentifier: "nearbyProductCell")
                 }
                 cell?.backgroundColor = UIColor.redColor()
+                cell?.textLabel!.text = "第\(indexPath.row)行"
 
                 return cell!
         }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.row {
-            case 0, 1:
+        switch indexPath.section {
+            case 0:
+                return CGFloat(self.products.count/3*140)
+            case 1:
                 return 420
             default:
                 return 100

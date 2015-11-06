@@ -29,14 +29,14 @@ class MyViewController: UIViewController, AvatorStateViewDelegate, AboutMineTabl
     func createAvatorView() {
         let user = UserModel()
         user.portraitUri = "https://raw.githubusercontent.com/onevcat/Kingfisher/master/images/kingfisher-1.jpg"
-        user.userAccount = "12334566777"
+        user.account = "12334566777"
         user.userName = "颜魏"
-        user.userInfos = "这个人很懒，什么也没有留下，你想看的什么资料呢？"
+        user.infos = "这个人很懒，什么也没有留下，你想看的什么资料呢？"
         
         avatorView = AvatorStateView()
         avatorView.delegate = self
         avatorView.loginState = LoginStateTpye.LoginSuccess
-        avatorView.userModel = user
+        avatorView.user = user
         view.addSubview(avatorView)
         avatorView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(64)

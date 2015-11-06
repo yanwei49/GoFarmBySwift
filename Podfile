@@ -5,9 +5,9 @@ pod 'RongCloudIMKit'
 pod 'Alamofire'
 pod 'Kingfisher'
 pod 'SnapKit'
+pod 'SwiftyJSON'
 
 pod 'RongCloudIMKit'
 pod 'SQLite.swift',git: 'https://github.com/stephencelis/SQLite.swift.git'
-
 
 

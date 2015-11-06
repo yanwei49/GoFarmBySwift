@@ -4,6 +4,7 @@ PODS:
   - RongCloudIMKit (2.2.0)
   - SnapKit (0.15.0)
   - SQLite.swift (1.0.0)
+  - SwiftyJSON (2.3.1)
 
 DEPENDENCIES:
   - Alamofire
@@ -11,6 +12,7 @@ DEPENDENCIES:
   - RongCloudIMKit
   - SnapKit
   - SQLite.swift (from `https://github.com/stephencelis/SQLite.swift.git`)
+  - SwiftyJSON
 
 EXTERNAL SOURCES:
   SQLite.swift:
@@ -27,5 +29,6 @@ SPEC CHECKSUMS:
   RongCloudIMKit: ab05b526fb8c03ea8b467993d8b6f5b75d86210f
   SnapKit: 4962eed2ee18e48cbd2b2292fffc57efe7235f87
   SQLite.swift: 8e77bf34f5cbb8e17445489448afab12e6a0be1f
+  SwiftyJSON: 592b53bee5ef3dd9b3bebc6b9cb7ee35426ae8c3
 
 COCOAPODS: 0.37.2
